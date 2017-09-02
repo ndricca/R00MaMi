@@ -6,6 +6,7 @@ import pandas as pd
 
 pd.set_option('display.max_colwidth', -1)
 
+print "Starting the mailing process... Time: {}\n\n\n".format(datetime.datetime.now())
 with open('bakeka_new.msg', 'rb') as f:
     new_df = pd.read_msgpack(f.read())
 '''
@@ -35,7 +36,7 @@ html_table = """\
 fromaddr = "andrea.ricca91@gmail.com"
 toaddr  = "andrea.ricca@hotmail.it"
 pwd = "01557452A+"
-print "Starting...\n\n"
+
 msg = MIMEMultipart()
 msg['From'] = fromaddr
 msg['To'] = toaddr
@@ -44,7 +45,7 @@ msg['Subject'] = "RoomaMI! Ecco i nuovi annunci per la tua ricerca"
 #body = "RoomaMI... ci pensa la stanza a trovare te!\nEcco un esempio di risultato: \n"
 #msg.attach(MIMEText(body, 'plain'))
 msg.attach(MIMEText(html_table, 'html'))
-print msg
+#print msg
 
 print "Sending...\n\n"
 
@@ -55,6 +56,6 @@ server.login(fromaddr, pwd)
 text = msg.as_string()
 server.sendmail(fromaddr, toaddr, text)
 server.quit()
-print "Sent!"
-
+print "Sent!\n"
+print "Mailing process ended.\n"
 ''''''
