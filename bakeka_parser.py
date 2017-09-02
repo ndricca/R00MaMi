@@ -5,6 +5,8 @@ import xml.etree.ElementTree as ET
 import datetime
 from bs4 import BeautifulSoup as BS
 
+print "Starting the parsing process... Time: {}\n\n\n".format(datetime.datetime.now())
+
 with open('bakeka_store.msg', 'rb') as f:
     old_df = pd.read_msgpack(f.read())
 old_df['pubdate'] = pd.to_datetime(old_df['pubdate'],infer_datetime_format=True)
@@ -122,6 +124,7 @@ new_store = new_df.to_msgpack('bakeka_new.msg')
 df = old_df.append(new_df,ignore_index=True)
 store = df.to_msgpack('bakeka_store.msg')
 
+print "Parsing process ended.\n\n"
 #print "\n\n#####\n\n"
 #print df['pubdate']
 
