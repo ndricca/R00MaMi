@@ -3,23 +3,23 @@ import requests
 import pandas as pd
 import xml.etree.ElementTree as ET
 import datetime
-import urllib2
-from xml.dom import minidom
 from bs4 import BeautifulSoup as BS
-from numpy import genfromtxt
 
 with open('bakeka_store.msg', 'rb') as f:
     old_df = pd.read_msgpack(f.read())
 old_df['pubdate'] = pd.to_datetime(old_df['pubdate'],infer_datetime_format=True)
 old_max = max(old_df['pubdate'])
 
+
 def getxmlcontent(url):
     r = requests.get(url)
     return r.content
 
+
 def striplink(link):
     strippedlink = re.search("^(.*)\?", link).group(1)
     return strippedlink
+
 
 def getvaluesBS(beautiful_soup, html_attrval, html_el = "div", html_attr = "class", html_attrval2=None):
     if html_attrval2 is None:
@@ -27,6 +27,7 @@ def getvaluesBS(beautiful_soup, html_attrval, html_el = "div", html_attr = "clas
     else:
         val = beautiful_soup.find(html_el,{html_attr : html_attrval})[html_attrval2]
     return val
+
 
 base_url = 'http://milano.bakeca.it/rss20-offro-camera.xml'
 bakeka_res = getxmlcontent(base_url)
@@ -116,11 +117,14 @@ new_df = pd.DataFrame.from_items(bk_dict.items(),
                                       "address","neighbourhood", "energy_class", "type_offer"])
 new_df['pubdate'] = pd.to_datetime(new_df['pubdate'],infer_datetime_format=True)
 
+new_store = new_df.to_msgpack('bakeka_new.msg')
+
 df = old_df.append(new_df,ignore_index=True)
+store = df.to_msgpack('bakeka_store.msg')
+
 #print "\n\n#####\n\n"
 #print df['pubdate']
 
-store = df.to_msgpack('bakeka_store.msg')
 
 
 '''
