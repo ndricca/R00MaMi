@@ -2,6 +2,7 @@
 import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
+import datetime
 import pandas as pd
 
 pd.set_option('display.max_colwidth', -1)
